@@ -135,7 +135,7 @@ const Profile = () => {
         </Typography>
         <Typography variant="h6">Ages: {covertAge(ages) ?? "-"}</Typography>
         <Typography variant="h6">
-          Height: {profile.height ? profile.height : "-"} M
+          Height: {profile.height ? profile.height : "-"} cm
         </Typography>
 
         <Box sx={{ mt: 2 }}>

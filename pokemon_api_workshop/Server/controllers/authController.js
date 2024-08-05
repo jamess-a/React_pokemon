@@ -3,13 +3,13 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 exports.register = (req, res) => {
-  const { username, password, email } = req.body;
+  console.log(req.body);
+  const { username, password, email , ages , phone , height } = req.body;
   bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) throw err;
-    const sql = 'INSERT INTO users (username, password, email) VALUES (?, ?, ?)';
-    db.query(sql, [username, hashedPassword, email], (err, result) => {
+    const sql = 'INSERT INTO users (username, password, email , age , phone , height) VALUES (?, ?, ? , ? , ? , ?)';
+    db.query(sql, [username, hashedPassword, email , ages , phone , height], (err, result) => {
       if (err) return res.status(500).send(err);
-
       res.status(201).send('User registered');
     });
   });

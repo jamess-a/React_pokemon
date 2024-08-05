@@ -25,6 +25,9 @@ function Login() {
     }
   }, [navigate]);
 
+  const handleRegister = async (event) => {
+    navigate("/register");
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -85,17 +88,18 @@ function Login() {
             variant="contained"
             color="primary"
             sx={{ mt: 2, marginLeft: 2 }}
+            onClick={handleRegister}
           >
             Register
           </Button>
         </Box>
       </Box>
       <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={success}
         autoHideDuration={3000}
         onClose={() => setSuccess(false)}
-        key={'topcenter'}
+        key={"topcenter"}
       >
         <Alert onClose={() => setSuccess(false)} severity="success">
           Login successful!

@@ -37,8 +37,9 @@ function Register() {
         phone,
         height,
       });
+      localStorage.setItem("token", response.data.token);
       setSuccess(true);
-      setTimeout(() => navigate("/login"), 3000);
+      setTimeout(() => navigate("/pokemon"), 3000);
     } catch (err) {
       console.error("Registration error:", err.response?.data || err.message);
       setError("Registration failed");
