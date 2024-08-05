@@ -8,6 +8,7 @@ import Card from "./card.jsx";
 import { AuthProvider } from "../context/AuthContext.jsx";
 import Profile from "./Profile.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Navbar from "./Navbar.jsx";
 
 const Container = styled("div")({
   display: "flex",
@@ -66,6 +67,7 @@ function Pokemon() {
 
   return (
     <>
+      <Navbar />
       <Container2_Row>
         <Profile />
         <Container>
@@ -92,6 +94,7 @@ function Pokemon() {
           </Container2_Row>
         </Container>
       </Container2_Row>
+
     </>
   );
 }

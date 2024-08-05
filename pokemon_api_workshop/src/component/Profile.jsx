@@ -8,6 +8,7 @@ import {
   CircularProgress,
   Alert,
   Button,
+  Snackbar,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import DialogEdit from "./DialogEdit.jsx";
@@ -18,14 +19,16 @@ const Profile = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [ages , setAges ] = useState(0);
+  const [ages, setAges] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleSignOut = () => {
+    setSuccess(true);
+    setTimeout(() => navigate("/"), 3000);
     signOut();
-    navigate("/");
   };
-  
+
   const covertAge = (ages) => {
     if (ages < 10) {
       return "baby";
@@ -57,21 +60,26 @@ const Profile = () => {
           setProfile(response.data);
           setAges(response.data.age);
         } catch (err) {
-          setError(
-            err.response ? err.response.data.message : "An error occurred"
-          );
+          if (err.response && err.response.status === 400) {
+            // ถ้า token หมดอายุหรือไม่ถูกต้อง
+            localStorage.removeItem("token"); // ลบ token
+            navigate("/"); // เปลี่ยนเส้นทางไปที่หน้าโฮม
+          } else {
+            setError(
+              err.response ? err.response.data.message : "An error occurred"
+            );
+          }
         } finally {
           setLoading(false);
         }
       } else {
-        setError("No authentication token found or Token has expired");
-        navigate("/");
+        setError("No authentication token found ");
         setLoading(false);
       }
     };
 
     fetchProfile();
-  }, []);
+  }, [navigate]);
 
   if (loading) {
     return (
@@ -122,9 +130,13 @@ const Profile = () => {
           {profile.username ? profile.username : "-"}'s Profile
         </Typography>
         <Typography variant="h6">Email: {profile.email}</Typography>
-        <Typography variant="h6">Phone: {profile.phone ? profile.phone : "-"}</Typography>
+        <Typography variant="h6">
+          Phone: {profile.phone ? profile.phone : "-"}
+        </Typography>
         <Typography variant="h6">Ages: {covertAge(ages) ?? "-"}</Typography>
-        <Typography variant="h6">Height: {profile.height ? profile.height : "-"} M</Typography>
+        <Typography variant="h6">
+          Height: {profile.height ? profile.height : "-"} M
+        </Typography>
 
         <Box sx={{ mt: 2 }}>
           <Button
@@ -144,11 +156,22 @@ const Profile = () => {
           </Button>
         </Box>
       </Box>
-      <DialogEdit 
-        profile={profile} 
-        open={dialogOpen} 
-        onClose={() => setDialogOpen(false)} 
+      <DialogEdit
+        profile={profile}
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
       />
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={success}
+        autoHideDuration={3000}
+        onClose={() => setSuccess(false)}
+        key={"topcenter"}
+      >
+        <Alert onClose={() => setSuccess(false)} severity="success">
+          Logout successful!
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

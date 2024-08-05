@@ -6,8 +6,7 @@ exports.getUserDetails = (req, res) => {
   const token = req.headers['authorization'] && req.headers['authorization'].split(' ')[1];
   if (!token) return res.status(401).json({ message: 'Access denied: No token provided' });
   jwt.verify(token, 'your_jwt_secret', (err, decoded) => {
-    if (err) return res.status(400).json({ message: 'Invalid token' });
-
+    if (err) return res.status(400).json({ message: 'Invalid token or expired token' });
     const sql = 'SELECT * FROM users WHERE id = ?';
     db.query(sql, [decoded.id], (err, result) => {
       if (err) return res.status(500).json({ message: 'Database error', error: err });

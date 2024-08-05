@@ -5,6 +5,7 @@ import Login from "./component/Login";
 import Register from "./component/Register";
 import Profile from "./component/Profile";
 import Pokemon from "./component/Pokemon";
+import Navbar from "./component/Navbar";
 import "./App.css";
 
 function App() {

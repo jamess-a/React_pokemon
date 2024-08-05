@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -8,8 +8,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 const DialogEdit = ({ profile, open, onClose }) => {
-    console.log(profile);
-  
   const [internalOpen, setInternalOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -24,7 +22,7 @@ const DialogEdit = ({ profile, open, onClose }) => {
   return (
     <React.Fragment>
       <Dialog
-        open={open} 
+        open={open}
         onClose={handleClose}
         PaperProps={{
           component: "form",
