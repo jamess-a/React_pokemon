@@ -12,7 +12,7 @@ function Login() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      navigate('/profile');
+      navigate('/pokemon');
     }
   }, [navigate]);
 
@@ -24,7 +24,7 @@ function Login() {
         password
       });
       localStorage.setItem('token', response.data.token);
-      navigate('/profile');
+      navigate('/pokemon');
     } catch (err) {
       setError('Invalid credentials');
     }
