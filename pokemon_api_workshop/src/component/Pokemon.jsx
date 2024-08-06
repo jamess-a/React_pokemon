@@ -9,6 +9,7 @@ import { AuthProvider } from "../context/AuthContext.jsx";
 import Profile from "./Profile.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
+import AdminTable from "./Admin_table.jsx";
 
 const Container = styled("div")({
   display: "flex",
@@ -52,7 +53,6 @@ function Pokemon() {
         setLoading(false);
       }
     };
-
     loadPokemon();
     return () => abortController.abort();
   }, [number]);
@@ -67,9 +67,8 @@ function Pokemon() {
 
   return (
     <>
-      <Navbar />
       <Container2_Row>
-        <Profile />
+        <Profile></Profile>
         <Container>
           <h1>{poke?.name}</h1>
           <div>
@@ -94,6 +93,7 @@ function Pokemon() {
           </Container2_Row>
         </Container>
       </Container2_Row>
+      <AdminTable widthsize={50} ></AdminTable>
 
     </>
   );

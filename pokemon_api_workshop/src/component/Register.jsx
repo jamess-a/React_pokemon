@@ -57,7 +57,9 @@ function Register() {
           minHeight: "100vh",
         }}
       >
-        <Card sx={{ maxWidth: 500, width: '100%', borderRadius: 2, boxShadow: 3 }}>
+        <Card
+          sx={{ maxWidth: 500, width: "100%", borderRadius: 2, boxShadow: 3 }}
+        >
           <CardContent>
             <Typography variant="h5" gutterBottom align="center">
               Register
@@ -123,12 +125,16 @@ function Register() {
                   />
                 </Grid>
               </Grid>
-              {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
+              {error && (
+                <Typography color="error" sx={{ mt: 2 }}>
+                  {error}
+                </Typography>
+              )}
               <Button
                 variant="contained"
                 color="primary"
                 type="submit"
-                sx={{ mt: 2, width: '100%' }}
+                sx={{ mt: 2, width: "100%" }}
               >
                 Register
               </Button>
@@ -137,6 +143,7 @@ function Register() {
         </Card>
       </Box>
       <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={success}
         autoHideDuration={3000}
         onClose={() => setSuccess(false)}

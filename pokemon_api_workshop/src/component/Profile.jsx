@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import DialogEdit from "./DialogEdit.jsx";
+import Navbar from "./Navbar.jsx";
 
 const Profile = () => {
   const { authData, signOut } = useContext(AuthContext);
@@ -81,6 +82,10 @@ const Profile = () => {
     fetchProfile();
   }, [navigate]);
 
+  const handleProfileUpdate = (newUsername) => {
+    setProfile((prevProfile) => ({ ...prevProfile, username: newUsername }));
+  };
+
   if (loading) {
     return (
       <Container>
@@ -116,63 +121,68 @@ const Profile = () => {
   }
 
   return (
-    <Container>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "10vh",
-        }}
-      >
-        <Typography variant="h4" gutterBottom>
-          {profile.username ? profile.username : "-"}'s Profile
-        </Typography>
-        <Typography variant="h6">Email: {profile.email}</Typography>
-        <Typography variant="h6">
-          Phone: {profile.phone ? profile.phone : "-"}
-        </Typography>
-        <Typography variant="h6">Ages: {covertAge(ages) ?? "-"}</Typography>
-        <Typography variant="h6">
-          Height: {profile.height ? profile.height : "-"} cm
-        </Typography>
+    <>
+      <Navbar profile_navbar={profile} />
+      <Container>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "100vh",
+          }}
+        >
+          <Typography variant="h4" gutterBottom>
+            {profile.username ? profile.username : "-"}'s Profile
+          </Typography>
+          <Typography variant="h6">Email: {profile.email}</Typography>
+          <Typography variant="h6">
+            Phone: {profile.phone ? profile.phone : "-"}
+          </Typography>
+          <Typography variant="h6">Ages: {covertAge(ages) ?? "-"}</Typography>
+          <Typography variant="h6">
+            Height: {profile.height ? profile.height : "-"} cm
+          </Typography>
 
-        <Box sx={{ mt: 2 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setDialogOpen(true)}
-          >
-            Edit Profile
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={handleSignOut}
-            sx={{ mt: 5 }}
-          >
-            LogOut
-          </Button>
+          <Box sx={{ mt: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setDialogOpen(true)}
+            >
+              Edit Profile
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={handleSignOut}
+              sx={{ mt: 5 }}
+            >
+              LogOut
+            </Button>
+          </Box>
         </Box>
-      </Box>
-      <DialogEdit
-        profile={profile}
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-      />
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={success}
-        autoHideDuration={3000}
-        onClose={() => setSuccess(false)}
-        key={"topcenter"}
-      >
-        <Alert onClose={() => setSuccess(false)} severity="success">
-          Logout successful!
-        </Alert>
-      </Snackbar>
-    </Container>
+        <DialogEdit
+          profile={profile}
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+          onProfileUpdate={handleProfileUpdate}
+        />
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={success}
+          autoHideDuration={3000}
+          onClose={() => setSuccess(false)}
+          key={"topcenter"}
+        >
+          <Alert onClose={() => setSuccess(false)} severity="success">
+            Logout successful!
+          </Alert>
+        </Snackbar>
+      </Container>
+
+    </>
   );
 };
 

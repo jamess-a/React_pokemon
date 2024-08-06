@@ -1,8 +1,9 @@
 const express = require('express');
-const { getUserDetails , getUserDetailsadmin} = require('../controllers/userController');
+const { getUserDetails , postuseredits} = require('../controllers/userController');
 const router = express.Router();
 
 router.get('/profile', getUserDetails);
-router.get('/users', getUserDetailsadmin);
+router.post('/edit/:id', postuseredits);
+
 
 module.exports = router;

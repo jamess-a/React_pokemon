@@ -39,7 +39,7 @@ function Login() {
       setSuccess(true);
       setTimeout(() => navigate("/pokemon"), 3000);
     } catch (err) {
-      setError("Invalid credentials");
+      setError("Invalid email or password");
     }
   };
 

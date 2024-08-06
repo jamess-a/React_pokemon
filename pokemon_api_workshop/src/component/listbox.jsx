@@ -23,10 +23,7 @@ const List1 = styled(List)(({ theme }) => ({
   textAlign: "center",
 }));
 
-
 const Listbox1 = ({ poke1 }) => {
-  //console.log("poke1:", poke1); 
-
   return (
     <CustomList aria-label="pokemon abilities">
       {poke1?.abilities?.map((abil, index) => (
