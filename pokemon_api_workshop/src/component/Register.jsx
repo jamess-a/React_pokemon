@@ -57,6 +57,9 @@ function Register() {
           minHeight: "100vh",
         }}
       >
+        <Typography variant="h4" gutterBottom align="center" sx={{ mb: 10 }}>
+          New! Pokémon
+        </Typography>
         <Card
           sx={{ maxWidth: 500, width: "100%", borderRadius: 2, boxShadow: 3 }}
         >

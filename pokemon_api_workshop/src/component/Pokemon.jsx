@@ -68,7 +68,7 @@ function Pokemon() {
   return (
     <>
       <Container2_Row>
-        <Profile></Profile>
+      <Profile />
         <Container>
           <h1>{poke?.name}</h1>
           <div>
@@ -93,7 +93,7 @@ function Pokemon() {
           </Container2_Row>
         </Container>
       </Container2_Row>
-      <AdminTable widthsize={50} ></AdminTable>
+      
 
     </>
   );

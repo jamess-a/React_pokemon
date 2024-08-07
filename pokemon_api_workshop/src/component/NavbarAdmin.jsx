@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -17,6 +17,8 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -58,15 +60,52 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const PrimarySearchAppBar = ({ profile_navbar }) => {
-  
-  const navigate = useNavigate();
+const AppBaradmin = () => {
+  const { authData, signOut } = useContext(AuthContext);
+  const [profile, setProfile] = useState(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const response = await axios.get(
+            "http://localhost:5000/user/profile",
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+          setProfile(response.data);
+          setAges(response.data.age);
+        } catch (err) {
+          if (err.response && err.response.status === 400) {
+            // ถ้า token หมดอายุหรือไม่ถูกต้อง
+            localStorage.removeItem("token"); // ลบ token
+            navigate("/"); // เปลี่ยนเส้นทางไปที่หน้าโฮม
+          } else {
+            setError(
+              err.response ? err.response.data.message : "An error occurred"
+            );
+          }
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        alert("Please login first");
+        navigate("/admin_login");
+      }
+    }
+    fetchProfile();
+  }, [navigate]);
+
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -89,6 +128,11 @@ const PrimarySearchAppBar = ({ profile_navbar }) => {
     navigate("/profile");
   };
 
+  const handlelogout = () => {
+    signOut();
+    navigate("/admin_login");
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -108,6 +152,7 @@ const PrimarySearchAppBar = ({ profile_navbar }) => {
     >
       <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handlelogout}>Logout</MenuItem>
     </Menu>
   );
 
@@ -182,7 +227,7 @@ const PrimarySearchAppBar = ({ profile_navbar }) => {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            PokeDex
+            Admin_PokeDex
           </Typography>
           <Search>
             <SearchIconWrapper>
@@ -216,9 +261,16 @@ const PrimarySearchAppBar = ({ profile_navbar }) => {
             <Typography
               variant="h9"
               component="div"
-              sx={{ display: { xs: "flex",  flexGrow: 1 , flexDirection: "column" , justifyContent: "center"} }}
+              sx={{
+                display: {
+                  xs: "flex",
+                  flexGrow: 1,
+                  flexDirection: "column",
+                  justifyContent: "center",
+                },
+              }}
             >
-              {profile_navbar?.username ? profile_navbar.username : "-"}
+              {profile?.username ? profile.username : "-"}
             </Typography>
             <IconButton
               size="large"
@@ -251,4 +303,4 @@ const PrimarySearchAppBar = ({ profile_navbar }) => {
     </Box>
   );
 };
-export default PrimarySearchAppBar;
+export default AppBaradmin;
