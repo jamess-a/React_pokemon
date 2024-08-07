@@ -13,7 +13,7 @@ exports.getUserDetailsadmin = (req, res) => {
 };
 
 exports.deleteUser = (req, res) => {
-  const ids = req.params.ids.split(","); 
+  const ids = req.params.ids.split(",");
 
   if (!Array.isArray(ids)) {
     return res
@@ -31,5 +31,17 @@ exports.deleteUser = (req, res) => {
     }
     console.log("Query result:", result);
     res.json({ message: `${result.affectedRows} records deleted.` });
+  });
+};
+
+exports.addUser = (req, res) => {
+  const sql = "INSERT INTO users SET ?";
+  db.query(sql, req.body, (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    console.log("Query result:", result);
+    res.json({ message: "User added successfully", result });
   });
 };
