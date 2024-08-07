@@ -14,7 +14,6 @@ import {
   Snackbar,
   TextField,
 } from "@mui/material";
-import AdminTable2 from "./Admin_table2.jsx";
 
 const AdminTable = () => {
   const [email, setEmail] = useState("");
@@ -29,7 +28,7 @@ const AdminTable = () => {
   const [selectedRows, setSelectRows] = useState([]);
   const [openMultiDelete, setOpenMultiDelete] = useState(false);
   const [open, setOpen] = useState(false);
-  const [openDialog_add_user, setOpenDialog_add_user] = useState(false);
+  const [openDialog_add_admin, setOpenDialog_add_admin] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [success, setSuccess] = useState(false);
   const [add_success, setAdd_success] = useState(false);
@@ -37,7 +36,7 @@ const AdminTable = () => {
 
   const fetchTable = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/admin_use/get_user");
+      const response = await axios.get("http://localhost:5000/admin_use/get_admin_user");
       setData(response.data);
       console.log(response.data);
     } catch (err) {
@@ -57,7 +56,7 @@ const AdminTable = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/admin_use/delete_user/${deleteId}`);
+      await axios.delete(`http://localhost:5000/admin_use/delete_admin/${deleteId}`);
       setData(data.filter((item) => item.id !== deleteId));
       setDeleteId(null);
       setOpen(false);
@@ -71,7 +70,7 @@ const AdminTable = () => {
     try {
       await Promise.all(
         selectedRows.map((id) =>
-          axios.delete(`http://localhost:5000/admin_use/delete_user/${id}`)
+          axios.delete(`http://localhost:5000/admin_use/delete_admin/${id}`)
         )
       );
       setData(data.filter((item) => !selectedRows.includes(item.id)));
@@ -83,9 +82,9 @@ const AdminTable = () => {
     }
   };
 
-  const handleAdd_User = async () => {
+  const handleAdd_Admin = async () => {
     try {
-      await axios.post("http://localhost:5000/admin_use/add_user", {
+      await axios.post("http://localhost:5000/admin_use/add_admin", {
         email,
         username,
         password,
@@ -108,7 +107,7 @@ const AdminTable = () => {
     setAge("");
     setHeight("");
     setPhone("");
-    setOpenDialog_add_user(false);
+    setOpenDialog_add_admin(false);
   };
 
   const handleOpenDialog = (id) => {
@@ -127,11 +126,11 @@ const AdminTable = () => {
   const handleCloseMultiDeleteDialog = () => {
     setOpenMultiDelete(false);
   };
-  const handleOpenDialog_add_user = () => {
-    setOpenDialog_add_user(true);
+  const handleOpenDialog_add_admin = () => {
+    setOpenDialog_add_admin(true);
   };
-  const handleCloseDialog_add_user = () => {
-    setOpenDialog_add_user(false);
+  const handleCloseDialog_add_admin = () => {
+    setOpenDialog_add_admin(false);
   };
 
   const columns = [
@@ -191,7 +190,7 @@ const AdminTable = () => {
         <Button
           variant="contained"
           color="secondary"
-          onClick={handleOpenDialog_add_user}
+          onClick={handleOpenDialog_add_admin}
           style={{
             marginLeft: 15,
             marginBottom: 15,
@@ -199,7 +198,7 @@ const AdminTable = () => {
             justifyContent: "start",
           }}
         >
-          add user
+          add admin
         </Button>
         <DataGrid
           rows={data}
@@ -230,7 +229,6 @@ const AdminTable = () => {
             },
           }}
         />
-        <AdminTable2></AdminTable2>
         <Dialog
           open={open}
           onClose={handleCloseDialog}
@@ -278,15 +276,15 @@ const AdminTable = () => {
         </Dialog>
 
         <Dialog
-          open={openDialog_add_user}
-          onClose={handleCloseDialog_add_user}
+          open={openDialog_add_admin}
+          onClose={handleCloseDialog_add_admin}
           aria-labelledby="add-admin-dialog-title"
           aria-describedby="add-admin-dialog-description"
         >
-          <DialogTitle id="add-admin-dialog-title">Add New User</DialogTitle>
+          <DialogTitle id="add-admin-dialog-title">Add New Admin</DialogTitle>
           <DialogContent>
             <DialogContentText id="add-admin-dialog-description">
-              Please fill in the details to add a new user.
+              Please fill in the details to add a new admin user.
             </DialogContentText>
             <TextField
               margin="dense"
@@ -338,7 +336,7 @@ const AdminTable = () => {
             <Button onClick={handleClose_add} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleAdd_User} color="secondary" autoFocus>
+            <Button onClick={handleAdd_Admin} color="secondary" autoFocus>
               Add
             </Button>
           </DialogActions>

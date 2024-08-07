@@ -31,3 +31,21 @@ exports.login = (req, res) => {
     });
   });
 };
+
+exports.Admin_login = (req, res) => {
+  const { email, password } = req.body;
+  const sql = 'SELECT * FROM admins WHERE email = ?';
+  db.query(sql, [email], (err, result) => {
+    if (err) return res.status(500).send(err);
+    if (result.length === 0) return res.status(400).send('User not found');
+
+    const user = result[0];
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (err) throw err;
+      if (!isMatch) return res.status(400).send('Incorrect password');
+      const token = jwt.sign({ id: user.id }, 'your_jwt_secret', { expiresIn: '1h' });
+      res.json({ token });
+    });
+  });
+};
+

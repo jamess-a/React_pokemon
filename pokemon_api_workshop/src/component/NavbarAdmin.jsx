@@ -78,7 +78,7 @@ const AppBaradmin = () => {
       if (token) {
         try {
           const response = await axios.get(
-            "http://localhost:5000/user/profile",
+            "http://localhost:5000/user/admin_profile",
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -100,7 +100,7 @@ const AppBaradmin = () => {
         }
       } else {
         alert("Please login first");
-        navigate("/admin_login");
+        
       }
     }
     fetchProfile();

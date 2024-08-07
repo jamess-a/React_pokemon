@@ -1,6 +1,7 @@
 const db = require("../../Server/db");
+const bcrypt = require("bcryptjs");
 
-exports.getUserDetailsadmin = (req, res) => {
+exports.getUserDetails = (req, res) => {
   const sql = "SELECT * FROM users";
   db.query(sql, (err, result) => {
     if (err) {
@@ -12,18 +13,45 @@ exports.getUserDetailsadmin = (req, res) => {
   });
 };
 
-exports.deleteUser = (req, res) => {
-  const ids = req.params.ids.split(",");
+exports.get_admin_user = (req, res) => {
+  const sql = "SELECT * FROM admins";
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    console.log("Query result:", result);
+    res.json(result);
+  });
+};
 
+exports.deleteAdminUser = (req, res) => {
+  const ids = req.params.ids.split(",");
   if (!Array.isArray(ids)) {
     return res
       .status(400)
       .json({ message: "Invalid input. Expected an array of ids." });
   }
-
   const placeholders = ids.map(() => "?").join(",");
   const sql = `DELETE FROM users WHERE id IN (${placeholders})`;
-
+  db.query(sql, ids, (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+    console.log("Query result:", result);
+    res.json({ message: `${result.affectedRows} records deleted.` });
+  });
+};
+exports.deleteUser = (req, res) => {
+  const ids = req.params.ids.split(",");
+  if (!Array.isArray(ids)) {
+    return res
+      .status(400)
+      .json({ message: "Invalid input. Expected an array of ids." });
+  }
+  const placeholders = ids.map(() => "?").join(",");
+  const sql = `DELETE FROM users WHERE id IN (${placeholders})`;
   db.query(sql, ids, (err, result) => {
     if (err) {
       console.error("Database error:", err);
@@ -35,13 +63,59 @@ exports.deleteUser = (req, res) => {
 };
 
 exports.addUser = (req, res) => {
-  const sql = "INSERT INTO users SET ?";
-  db.query(sql, req.body, (err, result) => {
+  const { username, password, email, age, phone, height } = req.body;
+  // แฮชรหัสผ่านก่อนทำการแทรก
+  bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) {
-      console.error("Database error:", err);
-      return res.status(500).json({ message: "Database error", error: err });
+      console.error("Error hashing password:", err);
+      return res
+        .status(500)
+        .json({ message: "Error hashing password", error: err });
     }
-    console.log("Query result:", result);
-    res.json({ message: "User added successfully", result });
+    const sql =
+      "INSERT INTO users (username, password, email, age, phone, height) VALUES (?, ?, ?, ?, ?, ?)";
+    db.query(
+      sql,
+      [username, hashedPassword, email, age, phone, height],
+      (err, result) => {
+        if (err) {
+          console.error("Database error:", err);
+          return res
+            .status(500)
+            .json({ message: "Database error", error: err });
+        }
+        console.log("Query result:", result);
+        res.json({ message: "User added successfully", result });
+      }
+    );
+  });
+};
+
+exports.addAdmin = (req, res) => {
+  const { username, password, email, age, phone, height } = req.body;
+  // แฮชรหัสผ่านก่อนทำการแทรก
+  bcrypt.hash(password, 10, (err, hashedPassword) => {
+    if (err) {
+      console.error("Error hashing password:", err);
+      return res
+        .status(500)
+        .json({ message: "Error hashing password", error: err });
+    }
+    const sql =
+      "INSERT INTO admins (username, password, email, age, phone, height) VALUES (?, ?, ?, ?, ?, ?)";
+    db.query(
+      sql,
+      [username, hashedPassword, email, age, phone, height],
+      (err, result) => {
+        if (err) {
+          console.error("Database error:", err);
+          return res
+            .status(500)
+            .json({ message: "Database error", error: err });
+        }
+        console.log("Query result:", result);
+        res.json({ message: "User added successfully", result });
+      }
+    );
   });
 };
