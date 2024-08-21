@@ -48,7 +48,7 @@ export default function BasicCard({ pokecard }) {
 
 
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card sx={{ minWidth: 275 , margin: "10px" }}>
       <CardContent>
         <div>
           <img src={pokecard?.sprites?.other.showdown.front_default} alt="" />

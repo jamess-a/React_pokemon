@@ -5,6 +5,8 @@ import axios from "axios";
 import Box from "./box.jsx";
 import Listbox1 from "./listbox.jsx";
 import Card from "./card.jsx";
+import Allcard from "./allcard.jsx";
+import {Divider} from "@mui/material";
 import { AuthProvider } from "../context/AuthContext.jsx";
 import Profile from "./Profile.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -27,13 +29,23 @@ const Container2_Row = styled("div")({
   padding: "10px",
 });
 
+const Container3_Row = styled("div")({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  textAlign: "center",
+  padding: "30px",
+  margin: "60px",
+  flexWrap: "wrap",
+});
+
 function Pokemon() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [poke, setPoke] = useState("");
   const [number, setNumber] = useState(6);
   const [dialogOpen, setDialogOpen] = useState(false);
-  
+
   useEffect(() => {
     let abortController = new AbortController();
     const loadPokemon = async () => {
@@ -68,7 +80,7 @@ function Pokemon() {
   return (
     <>
       <Container2_Row>
-      <Profile />
+        <Profile />
         <Container>
           <h1>{poke?.name}</h1>
           <div>
@@ -93,8 +105,20 @@ function Pokemon() {
           </Container2_Row>
         </Container>
       </Container2_Row>
-      
-
+      <Divider
+        sx={{
+          height: "3px",
+          width: "100%",
+          margin: "20px 0",
+          backgroundColor: "gray",
+          borderRadius: "5px",
+        }}
+      />
+      <Container>
+        <Container3_Row>
+          <Allcard />
+        </Container3_Row>
+      </Container>
     </>
   );
 }

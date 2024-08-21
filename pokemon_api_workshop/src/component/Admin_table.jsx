@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import AdminTable2 from "./Admin_table2.jsx";
 
+
 const AdminTable = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -350,6 +351,7 @@ const AdminTable = () => {
           autoHideDuration={3000}
           onClose={() => setSuccess(false)}
           key={"topcenter"}
+          severity="success"
         >
           <Alert onClose={() => setSuccess(false)} severity="success">
             Remove record successful!
@@ -362,6 +364,7 @@ const AdminTable = () => {
           autoHideDuration={3000}
           onClose={() => setAdd_success(false)}
           key={"topcenter"}
+          severity="success"
         >
           <Alert onClose={() => setAdd_success(false)} severity="success">
             Add record successful!

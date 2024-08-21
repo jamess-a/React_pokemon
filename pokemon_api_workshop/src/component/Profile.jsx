@@ -49,7 +49,6 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token");
-
       if (token) {
         try {
           const response = await axios.get(
@@ -78,7 +77,7 @@ const Profile = () => {
         setLoading(false);
       }
     };
-
+    
     fetchProfile();
   }, [navigate]);
 

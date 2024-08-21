@@ -15,9 +15,17 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 
 
 const Search = styled("div")(({ theme }) => ({
@@ -61,6 +69,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const AppBaradmin = () => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const toggleDrawer = (open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
+
   const { authData, signOut } = useContext(AuthContext);
   const [profile, setProfile] = useState(null);
   const [error, setError] = useState("");
@@ -100,12 +119,11 @@ const AppBaradmin = () => {
         }
       } else {
         alert("Please login first");
-        
+        navigate("/admin_login");
       }
-    }
+    };
     fetchProfile();
   }, [navigate]);
-
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -208,6 +226,49 @@ const AppBaradmin = () => {
     </Menu>
   );
 
+  const DrawerList = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+      <List>
+        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {["All mail", "Trash", "Spam"].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {["All mail", "Trash", "Spam"].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
@@ -217,6 +278,7 @@ const AppBaradmin = () => {
             edge="start"
             color="inherit"
             aria-label="open drawer"
+            onClick={toggleDrawer(true)}
             sx={{ mr: 2 }}
           >
             <MenuIcon />
@@ -298,6 +360,9 @@ const AppBaradmin = () => {
           </Box>
         </Toolbar>
       </AppBar>
+      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+        {DrawerList}
+      </Drawer>
       {renderMobileMenu}
       {renderMenu}
     </Box>
