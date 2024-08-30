@@ -11,6 +11,7 @@ import { IconButton, Snackbar, Alert } from "@mui/material";
 import DialogPokeTeame from "./TeamsDialog";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import WorkspacesIcon from "@mui/icons-material/Workspaces";
+import ItemCard from "./Item_table";
 import {
   Dialog,
   DialogContent,
@@ -32,6 +33,7 @@ export default function PokemonCardList() {
   const [teams, setTeams] = useState([]);
 
   const handleDialogOpen = (pokecard) => {
+    console.log("pokecard", pokecard);
     setSelectedPokemon(pokecard);
     setDialogOpen(true);
   };
@@ -50,21 +52,23 @@ export default function PokemonCardList() {
 
   const handleDialogOpenTeams = (newTeam) => {
     setTeams(newTeam);
-    console.log(" Your current team is ",teams);
+    console.log(" Your current team is ", teams);
     setDialogOpenTeams(true);
   };
 
-  const handleDialogCloseTeams = (teams) => {
+  const handleDialogCloseTeams = (newTeam) => {
+    setPoketeam(newTeam);
     setDialogOpenTeams(false);
   };
 
   useEffect(() => {
     const abortController = new AbortController();
+
     const loadPokemons = async () => {
       try {
         setLoading(true);
         let response = await axios.get(
-          "https://pokeapi.co/api/v2/pokemon?limit=20",
+          "https://pokeapi.co/api/v2/pokemon?limit=40",
           {
             signal: abortController.signal,
           }
@@ -97,6 +101,7 @@ export default function PokemonCardList() {
 
   return (
     <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+      <ItemCard></ItemCard>
       <Button
         onClick={() => handleDialogOpenTeams(teams)}
         variant="contained"
@@ -112,6 +117,13 @@ export default function PokemonCardList() {
         {pokemonList.map((pokecard) => (
           <Card key={pokecard.id} sx={{ width: "30%", margin: "10px" }}>
             <CardContent>
+              <Typography
+                sx={{ fontSize: 14 }}
+                color="text.secondary"
+                gutterBottom
+              >
+                {`#${pokecard.id}`}
+              </Typography>
               <div>
                 <img
                   src={
@@ -146,7 +158,7 @@ export default function PokemonCardList() {
             >
               <Button
                 size="small"
-                onClick={() => handleDialogOpen(pokecard)}
+                onClick={() => handleDialogOpen(pokecard) && console.log("Hit")}
                 sx={{
                   color: "primary.main",
                   transition: "transform 0.3s ease",
@@ -172,7 +184,13 @@ export default function PokemonCardList() {
             </CardActions>
           </Card>
         ))}
-
+        {dialogOpen && selectedPokemon && (
+          <DialogPoke
+            poke={selectedPokemon}
+            open={dialogOpen}
+            onClose={handleDialogClose}
+          />
+        )}
         {select_poketeam.length > 0 ? (
           <DialogPokeTeame
             poketeam={select_poketeam}

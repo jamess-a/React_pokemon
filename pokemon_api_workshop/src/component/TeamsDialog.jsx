@@ -5,25 +5,38 @@ import CardContent from "@mui/material/CardContent";
 import { CardActions } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { useState } from "react";
 
 const DialogTeams = ({ poketeam, open, onClose }) => {
+  const [poketeams, setPoketeam] = useState(poketeam);
+
+  const handleRemoveFromTeam = (pokemonId) => {
+    const newTeam = poketeams.filter((pokemon) => pokemon.id !== pokemonId);
+    setPoketeam(newTeam);
+  };
+
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="lg" sx={{ width: "100%" }}>
+    <Dialog
+      open={open}
+      onClose={() => onClose(poketeams)} 
+      fullWidth
+      maxWidth="lg"
+      sx={{ width: "100%" }}
+    >
       <DialogTitle sx={{ display: "flex", justifyContent: "center" }}>
-        Your Teams !
+        Your Team!
       </DialogTitle>
       <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
-        {poketeam.map((poketeam) => (
-          <Card key={poketeam.id} sx={{ width: "20%", margin: "10px" }}>
+        {poketeams.map((pokemon) => (
+          <Card key={pokemon.id} sx={{ width: "20%", margin: "10px" }}>
             <CardContent>
               <div>
                 <img
                   src={
-                    poketeam?.sprites?.other["official-artwork"].front_default
+                    pokemon?.sprites?.other["official-artwork"].front_default
                   }
                   alt=""
                   style={{ width: "100%" }}
@@ -37,28 +50,32 @@ const DialogTeams = ({ poketeam, open, onClose }) => {
                 Pokemon Name
               </Typography>
               <Typography variant="h5" component="div">
-                {poketeam?.name || "Unknown Pokemon"}
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Types:{" "}
-                {poketeam?.types
-                  ?.map((typeInfo) => typeInfo.type.name)
-                  .join(", ") || "Unknown Type"}
-              </Typography>
-              <Typography variant="body2">
-                Height: {poketeam?.height || "No Height available."} M
+                {pokemon?.name || "Unknown Pokemon"}
               </Typography>
             </CardContent>
             <CardActions
               sx={{ display: "flex", justifyContent: "space-between" }}
             >
-              <Button size="small" onClick={() => handleAddToTeam(poketeam)}>
+              <Button
+                size="small"
+                onClick={() => handleRemoveFromTeam(pokemon.id)}
+                sx={{
+                  color: "primary.main",
+                  transition: "transform 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.1)",
+                  },
+                }}
+              >
                 Remove from Team
               </Button>
             </CardActions>
           </Card>
         ))}
       </Box>
+      <DialogActions sx={{ justifyContent: "center" }}>
+        <Button onClick={() => onClose(poketeams)}>Close</Button> {/* Update onClose to pass updated team */}
+      </DialogActions>
     </Dialog>
   );
 };
