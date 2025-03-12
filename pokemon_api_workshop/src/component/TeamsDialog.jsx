@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -10,18 +10,24 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useState } from "react";
 
-const DialogTeams = ({ poketeam, open, onClose }) => {
+const DialogTeams = ({ poketeam, open, onClose}) => {
   const [poketeams, setPoketeam] = useState(poketeam);
+  const [qtypoke, setQtypoke] = useState(poketeams.length);
+  
+  console.log("ALL poketeams",poketeams , "qtypoke", qtypoke);
+
+  
 
   const handleRemoveFromTeam = (pokemonId) => {
     const newTeam = poketeams.filter((pokemon) => pokemon.id !== pokemonId);
     setPoketeam(newTeam);
+    setQtypoke(poketeams.length - 1);
   };
 
   return (
     <Dialog
       open={open}
-      onClose={() => onClose(poketeams)} 
+      onClose={() => onClose(poketeams)}
       fullWidth
       maxWidth="lg"
       sx={{ width: "100%" }}
@@ -29,6 +35,7 @@ const DialogTeams = ({ poketeam, open, onClose }) => {
       <DialogTitle sx={{ display: "flex", justifyContent: "center" }}>
         Your Team!
       </DialogTitle>
+      <Typography> Total Pokemon : {qtypoke}</Typography>
       <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
         {poketeams.map((pokemon) => (
           <Card key={pokemon.id} sx={{ width: "20%", margin: "10px" }}>
@@ -74,7 +81,7 @@ const DialogTeams = ({ poketeam, open, onClose }) => {
         ))}
       </Box>
       <DialogActions sx={{ justifyContent: "center" }}>
-        <Button onClick={() => onClose(poketeams)}>Close</Button> {/* Update onClose to pass updated team */}
+        <Button onClick={() => onClose(poketeams)}>Close</Button> {}
       </DialogActions>
     </Dialog>
   );

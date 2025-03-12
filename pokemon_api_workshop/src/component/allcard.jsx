@@ -11,7 +11,7 @@ import { IconButton, Snackbar, Alert } from "@mui/material";
 import DialogPokeTeame from "./TeamsDialog";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import WorkspacesIcon from "@mui/icons-material/Workspaces";
-import ItemCard from "./Item_table";
+
 import {
   Dialog,
   DialogContent,
@@ -44,14 +44,15 @@ export default function PokemonCardList() {
 
   const handleAddToTeam = (pokecard) => {
     setPokename(pokecard.name);
-    let newTeam = [...select_poketeam, pokecard];
-    setPoketeam(newTeam);
+    let newTeam = select_poketeam;
+    newTeam.push(pokecard);
+    setTeams(newTeam);
     setSuccess(true);
     setTimeout(() => setSuccess(false), 3000);
   };
 
-  const handleDialogOpenTeams = (newTeam) => {
-    setTeams(newTeam);
+  const handleDialogOpenTeams = (teams) => {
+    setTeams(teams);
     console.log(" Your current team is ", teams);
     setDialogOpenTeams(true);
   };
@@ -101,9 +102,8 @@ export default function PokemonCardList() {
 
   return (
     <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
-      <ItemCard></ItemCard>
       <Button
-        onClick={() => handleDialogOpenTeams(teams)}
+        onClick={() => handleDialogOpenTeams(select_poketeam)}
         variant="contained"
         color="primary"
         startIcon={<WorkspacesIcon />}

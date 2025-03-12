@@ -18,7 +18,7 @@ const DialogPoke = ({ poke, open, onClose }) => {
       open={open}
       onClose={() => onClose(pokes)}
       fullWidth
-      maxWidth="md"
+      maxWidth="sm"
       sx={{ width: "100%" }}
     >
       <DialogTitle sx={{ display: "flex", justifyContent: "center" }}>
@@ -32,7 +32,7 @@ const DialogPoke = ({ poke, open, onClose }) => {
           justifyContent: "start",
         }}
       >
-        <Card key={pokes.id} sx={{ width: "20%", margin: "10px" }}>
+        <Card key={pokes.id} sx={{ width: "100%", margin: "10px" }}>
           <CardContent>
             <div>
               <img
@@ -56,33 +56,9 @@ const DialogPoke = ({ poke, open, onClose }) => {
             sx={{ display: "flex", justifyContent: "space-between" }}
           ></CardActions>
         </Card>
-        <Card key={pokes.id} sx={{ width: "20%", margin: "10px" }}>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              TEST
-            </Typography>
-            <Typography variant="h5" component="div">
-              1
-            </Typography>
-            <Typography variant="h5" component="div">
-              2
-            </Typography>
-            <Typography variant="h5" component="div">
-              3
-            </Typography>
-          </CardContent>
-          <CardActions
-            sx={{ display: "flex", justifyContent: "space-between" }}
-          ></CardActions>
-        </Card>
       </Box>
       <DialogActions sx={{ justifyContent: "center" }}>
-        <Button onClick={() => onClose(pokes)}>Close</Button>{" "}
-        {/* Update onClose to pass updated team */}
+        <Button onClick={() => onClose(pokes)}>Close</Button> {}
       </DialogActions>
     </Dialog>
   );

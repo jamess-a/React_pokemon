@@ -7,4 +7,5 @@ router.get('/admin_profile', getAdminDetails);
 router.post('/edit/:id', postuseredits);
 
 
+
 module.exports = router;

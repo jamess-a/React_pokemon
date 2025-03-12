@@ -10,9 +10,12 @@ import {
   Button,
   Snackbar,
 } from "@mui/material";
+
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import DialogEdit from "./DialogEdit.jsx";
 import Navbar from "./Navbar.jsx";
+import QrCode from "./QrCode.jsx";
 
 const Profile = () => {
   const { authData, signOut } = useContext(AuthContext);
@@ -23,6 +26,7 @@ const Profile = () => {
   const [ages, setAges] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [connected, setConnected] = useState(false);
 
   const handleSignOut = () => {
     setSuccess(true);
@@ -61,13 +65,19 @@ const Profile = () => {
           setAges(response.data.age);
         } catch (err) {
           if (err.response && err.response.status === 400) {
-            // ถ้า token หมดอายุหรือไม่ถูกต้อง
-            localStorage.removeItem("token"); // ลบ token
-            navigate("/"); // เปลี่ยนเส้นทางไปที่หน้าโฮม
+            localStorage.removeItem("token"); 
+            navigate("/"); 
           } else {
             setError(
-              err.response ? err.response.data.message : "An error occurred"
+              err.response
+                ? err.response.data.message
+                : "Could not fetch profile"
             );
+            navigate("/");
+            if (err.response && err.response.status === 401) {
+              setConnected(false);
+              navigate("/");
+            }
           }
         } finally {
           setLoading(false);
@@ -77,7 +87,7 @@ const Profile = () => {
         setLoading(false);
       }
     };
-    
+
     fetchProfile();
   }, [navigate]);
 
@@ -132,6 +142,27 @@ const Profile = () => {
             minHeight: "100vh",
           }}
         >
+          <Box sx={{ mb: 4 }}>
+            <QrCode />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "start",
+              mb: 2,
+              alignItems: "start",
+            }}
+          >
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<ArrowBackIcon />}
+              onClick={() => navigate("/pokemon")}
+            >
+              Back
+            </Button>
+          </Box>
           <Typography variant="h4" gutterBottom>
             {profile.username ? profile.username : "-"}'s Profile
           </Typography>
@@ -180,7 +211,6 @@ const Profile = () => {
           </Alert>
         </Snackbar>
       </Container>
-
     </>
   );
 };

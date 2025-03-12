@@ -6,7 +6,7 @@ import Box from "./box.jsx";
 import Listbox1 from "./listbox.jsx";
 import Card from "./card.jsx";
 import Allcard from "./allcard.jsx";
-import {Divider} from "@mui/material";
+import { CircularProgress, Divider } from "@mui/material";
 import { AuthProvider } from "../context/AuthContext.jsx";
 import Profile from "./Profile.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -42,15 +42,20 @@ const Container3_Row = styled("div")({
 function Pokemon() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isloading, isLoading] = useState(false);
   const [poke, setPoke] = useState("");
   const [number, setNumber] = useState(6);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  
   useEffect(() => {
+    
     let abortController = new AbortController();
+
     const loadPokemon = async () => {
       try {
         setLoading(true);
+        isLoading(true);
         let response = await axios.get(
           `https://pokeapi.co/api/v2/pokemon/${number}`,
           {
@@ -63,6 +68,7 @@ function Pokemon() {
         setError("Something went wrong" + error);
       } finally {
         setLoading(false);
+        isLoading(false);
       }
     };
     loadPokemon();
@@ -84,7 +90,11 @@ function Pokemon() {
         <Container>
           <h1>{poke?.name}</h1>
           <div>
-            <img src={poke?.sprites?.other.home.front_default} alt="" />
+            {isloading ? (
+              <CircularProgress color="secondary" />
+            ) : (
+              <img src={poke?.sprites?.other.home.front_default} alt="" />
+            )}
           </div>
           <Listbox1 style={{ marginTop: "10px" }} poke1={poke} />
         </Container>

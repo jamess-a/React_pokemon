@@ -24,7 +24,7 @@ const DialogEdit = ({ profile, open, onClose, onProfileUpdate }) => {
   const handleClose = () => {
 
     setInternalOpen(false);
-    onClose(); // call onClose when the Dialog is closed
+    onClose(); 
   };
 
   const handleSubmit = async (event) => {
@@ -39,7 +39,7 @@ const DialogEdit = ({ profile, open, onClose, onProfileUpdate }) => {
       onProfileUpdate(username);
       setSuccess(true);
       setTimeout(() => handleClose(), 4000);
-     // close the dialog on successful submission
+     
     } catch (err) {
       console.error("edit profile error:", err.response?.data || err.message);
       setError("Edit profile failed");
@@ -53,7 +53,7 @@ const DialogEdit = ({ profile, open, onClose, onProfileUpdate }) => {
         onClose={handleClose}
         PaperProps={{
           component: "form",
-          onSubmit: handleSubmit, // directly use handleSubmit
+          onSubmit: handleSubmit, 
         }}
       >
         <DialogTitle>Edit Profile</DialogTitle>
@@ -75,8 +75,8 @@ const DialogEdit = ({ profile, open, onClose, onProfileUpdate }) => {
             type="text"
             fullWidth
             variant="standard"
-            value={username} // bind value to state
-            onChange={(e) => setUsername(e.target.value)} // update state on change
+            value={username} 
+            onChange={(e) => setUsername(e.target.value)} 
           />
         </DialogContent>
         {error && <Typography style={{ color: "red" }}>{error}</Typography>}

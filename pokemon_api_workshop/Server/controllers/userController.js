@@ -2,7 +2,6 @@ const db = require("../../Server/db");
 const jwt = require("jsonwebtoken");
 
 exports.getUserDetails = (req, res) => {
-  // แยก token ออกจาก Bearer
   const token =
     req.headers["authorization"] && req.headers["authorization"].split(" ")[1];
   if (!token)
@@ -26,7 +25,6 @@ exports.getUserDetails = (req, res) => {
 };
 
 exports.getAdminDetails = (req, res) => {
-  // แยก token ออกจาก Bearer
   const token =
     req.headers["authorization"] && req.headers["authorization"].split(" ")[1];
   if (!token)

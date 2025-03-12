@@ -64,7 +64,6 @@ exports.deleteUser = (req, res) => {
 
 exports.addUser = (req, res) => {
   const { username, password, email, age, phone, height } = req.body;
-  // แฮชรหัสผ่านก่อนทำการแทรก
   bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) {
       console.error("Error hashing password:", err);
@@ -93,7 +92,6 @@ exports.addUser = (req, res) => {
 
 exports.addAdmin = (req, res) => {
   const { username, password, email, age, phone, height } = req.body;
-  // แฮชรหัสผ่านก่อนทำการแทรก
   bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) {
       console.error("Error hashing password:", err);

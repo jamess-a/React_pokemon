@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { response } from "express";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -30,6 +31,11 @@ function Login() {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
     try {
       const response = await axios.post("http://localhost:5000/auth/login", {
         email,
@@ -39,7 +45,15 @@ function Login() {
       setSuccess(true);
       setTimeout(() => navigate("/pokemon"), 3000);
     } catch (err) {
-      setError("Invalid email or password");
+      if (err.code === "ERR_NETWORK") {
+        setError("Lost connection to the server.");
+      } else if (err.response.status === 400) {
+        setError(response.data.message);
+      } else if (err.response && err.response.status === 400) {
+        setError("Wrong email or password.");
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
     }
   };
 
@@ -64,6 +78,7 @@ function Login() {
             fullWidth
             margin="normal"
             value={email}
+            required={true}
             onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
@@ -73,6 +88,7 @@ function Login() {
             fullWidth
             margin="normal"
             value={password}
+            required={true}
             onChange={(e) => setPassword(e.target.value)}
           />
           {error && <Typography color="error">{error}</Typography>}
